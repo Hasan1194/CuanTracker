@@ -1,0 +1,22 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.CuanTracker" parent="Theme.MaterialComponents">
+        <item name="colorPrimary">@color/white</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorSecondary">@color/green</item>
+        <item name="colorControlActivated">@color/green</item>
+        <item name="colorPrimaryVariant">@color/yellow</item>
+    </style>
+    <style name="BottomNavStyle" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="android:background">@color/yellow</item>
+        <item name="itemIconTint">@color/green</item>
+        <item name="itemTextColor">@color/white</item>
+    </style>
+    <style name="DeleteButtonStyle" parent="Widget.Material3.FloatingActionButton.Primary">
+        <item name="backgroundTint">@color/red</item>
+        <item name="iconTint">@color/white</item>
+    </style>
+    <style name="Theme.CuanTracker" parent="Base.Theme.CuanTracker" />
+
+    <color name="red">#FF1100</color>
+</resources>
