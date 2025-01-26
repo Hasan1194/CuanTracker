@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.CuanTracker" parent="Theme.Material3.DayNight">
+    <style name="Base.Theme.CuanTracker" parent="Theme.MaterialComponents.DayNight">
         <item name="colorPrimary">@color/white</item>
         <item name="android:textColorPrimary">@color/white</item>
         <item name="android:textColorSecondary">@color/green</item>
