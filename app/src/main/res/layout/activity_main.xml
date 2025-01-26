@@ -38,8 +38,9 @@
             android:id="@+id/navView"
             style="@style/BottomNavStyle"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             app:menu="@menu/bottom_menu"
+            app:elevation="0dp"
             android:background="@android:color/transparent"
             app:backgroundTint="@color/dark_green" />
     </com.google.android.material.bottomappbar.BottomAppBar>
