@@ -1,4 +1,4 @@
-package com.h1194.cuantracker.ui;
+package com.h1194.cuantracker.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,21 +10,19 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.firestore.FirebaseFirestore
 import com.h1194.cuantracker.R
 import com.h1194.cuantracker.data.local.Transaction
-import com.h1194.cuantracker.databinding.FragmentHistoryBinding
+import com.h1194.cuantracker.data.remote.FirestoreRepository
 import com.h1194.cuantracker.ui.adapter.HistoryAdapter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
 class HistoryFragment : Fragment() {
 
     private lateinit var historyAdapter: HistoryAdapter
     private lateinit var recyclerView: RecyclerView
-    private val db = FirebaseFirestore.getInstance()
+    private val repository = FirestoreRepository()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,32 +33,30 @@ class HistoryFragment : Fragment() {
         recyclerView = view.findViewById(R.id.rvStory)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.itemAnimator = DefaultItemAnimator()
-        loadTransactionsFromFirebase()
+
+        historyAdapter = HistoryAdapter(emptyList()) { transaction ->
+            deleteTransaction(transaction)
+        }
+        recyclerView.adapter = historyAdapter
+
+        loadTransactionsFromRepository()
 
         return view
     }
 
-    private fun loadTransactionsFromFirebase() {
+    private fun loadTransactionsFromRepository() {
         lifecycleScope.launch(Dispatchers.IO) {
             try {
-                val transactions = mutableListOf<Transaction>()
-                val snapshot = db.collection("transactions").get().await()
-
-                for (document in snapshot.documents) {
-                    val transaction = document.toObject(Transaction::class.java)
-                    transaction?.let {
-                        transactions.add(it)
-                    }
-                }
+                val transactions = repository.getAllTransactions()
 
                 withContext(Dispatchers.Main) {
-                    historyAdapter = HistoryAdapter(transactions) { transaction ->
-                        deleteTransaction(transaction)
-                    }
-                    recyclerView.adapter = historyAdapter
+                    historyAdapter.updateData(transactions)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(requireContext(), "Failed to load transactions", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
@@ -68,11 +64,18 @@ class HistoryFragment : Fragment() {
     private fun deleteTransaction(transaction: Transaction) {
         lifecycleScope.launch(Dispatchers.IO) {
             try {
-                db.collection("transactions").document(transaction.id).delete().await()
+                repository.deleteTransaction(transaction.id)
 
-                loadTransactionsFromFirebase()
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(requireContext(), "Transaction deleted", Toast.LENGTH_SHORT).show()
+
+                    loadTransactionsFromRepository()
+                }
             } catch (e: Exception) {
                 e.printStackTrace()
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(requireContext(), "Failed to delete transaction", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }

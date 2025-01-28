@@ -68,8 +68,9 @@
                     android:hint="Select Date"
                     android:focusable="false"
                     android:clickable="true"
-                    android:inputType="date"
+                    android:inputType="none"
                     tools:ignore="TouchTargetSize" />
+
             </LinearLayout>
 
             <Button

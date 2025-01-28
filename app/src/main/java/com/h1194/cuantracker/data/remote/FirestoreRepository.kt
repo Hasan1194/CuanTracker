@@ -3,7 +3,6 @@ package com.h1194.cuantracker.data.remote
 import com.google.firebase.firestore.FirebaseFirestore
 import com.h1194.cuantracker.data.local.Transaction
 import kotlinx.coroutines.tasks.await
-import java.util.Date
 
 class FirestoreRepository {
 
@@ -14,7 +13,7 @@ class FirestoreRepository {
         val data = hashMapOf(
             "type" to transaction.type,
             "amount" to transaction.amount,
-            "date" to transaction.date.time
+            "date" to transaction.date
         )
         transactionCollection.add(data).await()
     }
@@ -24,7 +23,7 @@ class FirestoreRepository {
         return snapshot.documents.mapNotNull { doc ->
             val type = doc.getString("type")
             val amount = doc.getDouble("amount")?.toFloat()
-            val date = doc.getLong("date")?.let { Date(it) }
+            val date = doc.getDate("date") // Langsung ambil tipe Date
 
             if (type != null && amount != null && date != null) {
                 Transaction(type = type, amount = amount, date = date)

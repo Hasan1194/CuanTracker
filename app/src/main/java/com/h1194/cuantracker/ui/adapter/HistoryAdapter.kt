@@ -50,9 +50,8 @@ class HistoryAdapter(
 
     override fun getItemCount() = data.size
 
-    // Fungsi untuk memperbarui data
     fun updateData(newData: List<Transaction>) {
         data = newData
-        notifyDataSetChanged()  // Memberitahu RecyclerView bahwa data telah berubah
+        notifyDataSetChanged()
     }
 }
