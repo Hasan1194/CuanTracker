@@ -30,6 +30,7 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private lateinit var db: FirebaseFirestore
+    private lateinit var homeAdapter: HomeAdapter
     private val currencyFormatter = NumberFormat.getCurrencyInstance(Locale("id", "ID"))
 
     override fun onCreateView(
@@ -42,6 +43,7 @@ class HomeFragment : Fragment() {
         setupLineChart(binding.lineChart)
         setupRecyclerView()
         setupProfitCard()
+        refreshData()
 
         return binding.root
     }
@@ -153,6 +155,18 @@ class HomeFragment : Fragment() {
             }
             .addOnFailureListener { exception ->
                 Toast.makeText(requireContext(), "Gagal mengambil data: ${exception.message}", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    private fun refreshData() {
+        db.collection("transactions")
+            .get()
+            .addOnSuccessListener { documents ->
+                val newTransactions = documents.mapNotNull { it.toObject(Transaction::class.java) }
+                homeAdapter.updateData(newTransactions)
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(requireContext(), "Gagal memperbarui data: ${exception.message}", Toast.LENGTH_SHORT).show()
             }
     }
 
