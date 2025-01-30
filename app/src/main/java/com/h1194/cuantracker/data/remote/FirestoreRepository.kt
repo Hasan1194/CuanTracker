@@ -23,7 +23,7 @@ class FirestoreRepository {
         return snapshot.documents.mapNotNull { doc ->
             val type = doc.getString("type")
             val amount = doc.getDouble("amount")?.toFloat()
-            val date = doc.getDate("date") // Langsung ambil tipe Date
+            val date = doc.getDate("date")
 
             if (type != null && amount != null && date != null) {
                 Transaction(type = type, amount = amount, date = date)
