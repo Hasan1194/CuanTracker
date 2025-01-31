@@ -63,8 +63,11 @@ class HomeFragment : Fragment() {
                 val pendapatanEntries = mutableListOf<Entry>()
                 val pengeluaranEntries = mutableListOf<Entry>()
 
+                println("Total transactions: ${transactions.size}")
+
                 for (i in 5 downTo 0) {
-                    calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH) - i)
+                    calendar.time = Date()
+                    calendar.add(Calendar.MONTH, -i)
                     val monthStr = monthFormat.format(calendar.time)
                     months.add(monthStr)
 
@@ -75,6 +78,8 @@ class HomeFragment : Fragment() {
                     val pengeluaran = transactions.filter {
                         it.type == "Pengeluaran" && isInMonth(it.date, calendar)
                     }.sumByDouble { it.amount.toDouble() }
+
+                    println("Month: $monthStr, Pendapatan: $pendapatan, Pengeluaran: $pengeluaran")
 
                     pendapatanEntries.add(Entry(5 - i.toFloat(), pendapatan.toFloat()))
                     pengeluaranEntries.add(Entry(5 - i.toFloat(), pengeluaran.toFloat()))
@@ -121,7 +126,12 @@ class HomeFragment : Fragment() {
                     animateX(1000)
                 }
             } catch (e: Exception) {
-                Toast.makeText(requireContext(), "Gagal memuat grafik: ${e.message}", Toast.LENGTH_SHORT).show()
+                e.printStackTrace()
+                Toast.makeText(
+                    requireContext(),
+                    "Error: ${e.message}\n${e.stackTraceToString()}",
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
     }
@@ -129,9 +139,17 @@ class HomeFragment : Fragment() {
     private fun isInMonth(date: Date, calendar: Calendar): Boolean {
         val monthStart = calendar.clone() as Calendar
         monthStart.set(Calendar.DAY_OF_MONTH, 1)
+        monthStart.set(Calendar.HOUR_OF_DAY, 0)
+        monthStart.set(Calendar.MINUTE, 0)
+        monthStart.set(Calendar.SECOND, 0)
+
         val monthEnd = calendar.clone() as Calendar
         monthEnd.set(Calendar.DAY_OF_MONTH, monthEnd.getActualMaximum(Calendar.DAY_OF_MONTH))
-        return date.after(monthStart.time) && date.before(monthEnd.time)
+        monthEnd.set(Calendar.HOUR_OF_DAY, 23)
+        monthEnd.set(Calendar.MINUTE, 59)
+        monthEnd.set(Calendar.SECOND, 59)
+
+        return !date.before(monthStart.time) && !date.after(monthEnd.time)
     }
 
     private fun setupProfitCard() {
