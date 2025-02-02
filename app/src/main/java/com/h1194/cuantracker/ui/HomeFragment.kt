@@ -156,6 +156,8 @@ class HomeFragment : Fragment() {
         db.collection("transactions")
             .get()
             .addOnSuccessListener { documents ->
+                if (!isAdded || _binding == null) return@addOnSuccessListener
+
                 val transactions = documents.mapNotNull { it.toObject(Transaction::class.java) }
                 val pendapatan = transactions.filter { it.type == "Pendapatan" }.sumByDouble { it.amount.toDouble() }
                 val pengeluaran = transactions.filter { it.type == "Pengeluaran" }.sumByDouble { it.amount.toDouble() }
@@ -165,6 +167,7 @@ class HomeFragment : Fragment() {
                 binding.textViewProfit.text = "Keuntungan Bulan Ini: $formattedProfit"
             }
             .addOnFailureListener { exception ->
+                if (!isAdded || _binding == null) return@addOnFailureListener
                 Toast.makeText(requireContext(), "Gagal menghitung data: ${exception.message}", Toast.LENGTH_SHORT).show()
             }
     }
