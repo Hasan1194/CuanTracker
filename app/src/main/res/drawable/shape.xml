@@ -1,0 +1,14 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <!-- Warna latar belakang tombol -->
+            <solid android:color="@color/dark_green" />
+
+            <!-- Warna garis luar -->
+            <stroke android:width="2dp" android:color="@color/green" />
+
+            <!-- Radius sudut -->
+            <corners android:radius="8dp" />
+        </shape>
+    </item>
+</selector>

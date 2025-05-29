@@ -9,4 +9,25 @@
     <string name="date">ddmmyyyy</string>
     <string name="deleteBtn">Delete</string>
     <string name="type">type</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="login">Login</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="not_registered_yet">Not registered yet?</string>
+    <string name="create_an_account">Create an account!</string>
+    <string name="logo_cuantracker">logo</string>
+    <string name="register">register</string>
+    <string name="name">Name</string>
+    <string name="already_have_account">Have an account?</string>
+    <string name="login_here">Login here!</string>
+    <string name="email_error">Please enter a valid email address \'example@example.com\'</string>
+    <string name="password_error">The password must be at least 8 characters long</string>
 </resources>

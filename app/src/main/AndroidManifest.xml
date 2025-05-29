@@ -16,6 +16,16 @@
         android:theme="@style/Theme.CuanTracker"
         tools:targetApi="31">
         <activity
+            android:name=".ui.RegisterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.login.LoginActivity"
+            android:exported="false"
+            android:label="@string/title_activity_login" />
+        <activity
             android:name=".ui.RegistrasiActivity"
             android:exported="false" />
         <activity
