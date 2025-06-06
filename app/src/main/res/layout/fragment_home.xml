@@ -60,7 +60,8 @@
         android:layout_margin="16dp"
         app:layout_constraintTop_toBottomOf="@id/cardViewProfit"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:listitem="@layout/item_cardhome"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewHistory"

@@ -41,7 +41,7 @@ class FirestoreRepository {
         name: String,
         email: String,
         password: String,
-        role: String = "owner"
+        role: String
     ): String {
 
         val result = auth.createUserWithEmailAndPassword(email, password).await()
@@ -59,7 +59,7 @@ class FirestoreRepository {
         return uid
     }
 
-
-
-
+    fun getAvailableRoles(): List<String> {
+        return listOf("owner", "admin", "karyawan")
+    }
 }
