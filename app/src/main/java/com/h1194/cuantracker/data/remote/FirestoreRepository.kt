@@ -3,6 +3,7 @@ package com.h1194.cuantracker.data.remote
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.h1194.cuantracker.data.local.Transaction
+import com.h1194.cuantracker.data.local.User
 import kotlinx.coroutines.tasks.await
 
 class FirestoreRepository {
@@ -10,6 +11,7 @@ class FirestoreRepository {
     private val db = FirebaseFirestore.getInstance()
     val auth = FirebaseAuth.getInstance()
     private val transactionCollection = db.collection("transactions")
+    private val userCollection = db.collection("user")
 
     suspend fun addTransaction(transaction: Transaction) {
         val data = hashMapOf(
@@ -54,12 +56,56 @@ class FirestoreRepository {
             "role" to role
         )
 
-        db.collection("user").document(uid).set(user).await()
+        userCollection.document(uid).set(user).await()
 
         return uid
+    }
+
+    suspend fun loginUserWithEmailPassword(email: String, password: String): User {
+        val result = auth.signInWithEmailAndPassword(email, password).await()
+        val uid = result.user?.uid ?: throw Exception("Gagal mendapatkan UID")
+
+        return getUserById(uid)
+    }
+
+    suspend fun getUserById(uid: String): User {
+        val document = userCollection.document(uid).get().await()
+
+        if (!document.exists()) {
+            throw Exception("Data user tidak ditemukan")
+        }
+
+        return User(
+            id = document.getString("id") ?: "",
+            name = document.getString("name") ?: "",
+            email = document.getString("email") ?: "",
+            role = document.getString("role") ?: ""
+        )
+    }
+
+    suspend fun getCurrentUser(): User? {
+        val currentUser = auth.currentUser
+        return if (currentUser != null) {
+            try {
+                getUserById(currentUser.uid)
+            } catch (e: Exception) {
+                null
+            }
+        } else {
+            null
+        }
+    }
+
+    fun isUserLoggedIn(): Boolean {
+        return auth.currentUser != null
+    }
+
+    fun signOut() {
+        auth.signOut()
     }
 
     fun getAvailableRoles(): List<String> {
         return listOf("owner", "admin", "karyawan")
     }
+
 }
