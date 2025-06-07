@@ -1,5 +1,6 @@
 package com.h1194.cuantracker.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.*
@@ -24,6 +25,7 @@ class RegisterActivity : AppCompatActivity() {
         val roleSpinner = findViewById<Spinner>(R.id.roleSpinner)
         val registerButton = findViewById<Button>(R.id.loginButton)
         val progressBar = findViewById<LinearProgressIndicator>(R.id.linearProgressBar)
+        val loginText = findViewById<TextView>(R.id.createAccountText)
 
         // Setup spinner untuk role
         setupRoleSpinner(roleSpinner)
@@ -70,6 +72,10 @@ class RegisterActivity : AppCompatActivity() {
                         Toast.makeText(this@RegisterActivity, "Registrasi gagal: ${e.message}", Toast.LENGTH_LONG).show()
                     }
                 }
+            }
+            loginText.setOnClickListener {
+                val intent = Intent(this, LoginActivity::class.java)
+                startActivity(intent)
             }
         }
     }
